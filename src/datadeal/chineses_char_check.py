@@ -10,7 +10,7 @@ def is_contains_chinese(strs):
 IMGS_ROOT_DIR = '/zhourui/workspace/pro/fatigue/data/video/train/fatigue_20210122_20210131'
 
 level = 2
-videos = glob.glob(os.path.join(IMGS_ROOT_DIR, '/*' * level + '.mp4'))
+videos = glob.glob(os.path.join(IMGS_ROOT_DIR, '/*' * level + '.avi'))
 
 for v in videos:
     if is_contains_chinese(v):
