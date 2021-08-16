@@ -1,20 +1,23 @@
+#-*- coding:utf-8 -*-
 import os
 import glob
 
 def is_contains_chinese(strs):
     for _char in strs:
-        if '\u4e00' <= _char <= '\u9fa5':
+        if u'\u4e00' <= _char <= u'\u9fff':
             return True
     return False
 
 IMGS_ROOT_DIR = '/zhourui/workspace/pro/fatigue/data/video/train/fatigue_20210122_20210131'
 
-level = 2
-videos = glob.glob(os.path.join(IMGS_ROOT_DIR, '*/' * level + '.avi'))
+level = 1
+videos = glob.glob(os.path.join(IMGS_ROOT_DIR, '*/' * level + '*.avi'))
 for v in videos:
-    if is_contains_chinese(v):
-        print(v)
-        break
+    if is_contains_chinese(os.path.basename(v)):
+        print('Chineses char : ', v)
+
+    if ' ' in v:
+        print('Space in : ', v)
 
 
 
