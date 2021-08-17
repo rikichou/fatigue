@@ -29,8 +29,8 @@ def parse_args():
     parser.add_argument(
         '--level',
         type=int,
-        default=2,
-        choices=[1, 2],
+        default=3,
+        choices=[1, 2, 3],
         help='directory level of data')
     parser.add_argument(
         '--out-root-path',
@@ -100,6 +100,7 @@ def build_file_list(src_folder_aitxt, frame_info, shuffle=False):
                 generated file list for rgb, flow_list is the generated
                 file list for flow.
         """
+        invalid_count = 0
         rgb_list, flow_list = list(), list()
         for item in frame_info:
             video_prefix = item
@@ -108,19 +109,25 @@ def build_file_list(src_folder_aitxt, frame_info, shuffle=False):
             video_aitxt_path = os.path.join(src_folder_aitxt, video_prefix+'.aitxt')
             if not os.path.exists(video_aitxt_path):
                 print("video aitxt is not found! {}".format(video_aitxt_path))
+                invalid_count += 1
                 continue
             fatigue_idx_list = get_fatigue_index_from_aitxt(video_aitxt_path)
             if len(fatigue_idx_list) < 1:
                 print("Have no Fatigue warning in {}".format(video_aitxt_path))
+                invalid_count += 1
                 continue
 
-            rgb_list.append('{} {} {} {}\n'.format(item, frame_info[item][1], frame_info[item][2], ','.join(str(x+1) for x in fatigue_idx_list)))
+            # video_prefix, total_frame_num, label, face_sx face_sy face_ex face_ey, fatigue indexes
+            rgb_list.append('{},{},{},{}\n'.format(item, frame_info[item][1], frame_info[item][2], ','.join(str(x+1) for x in fatigue_idx_list)))
 
         if shuffle:
             random.shuffle(rgb_list)
+        if invalid_count>0:
+            print("Found {} invalid items!".format(invalid_count))
         return rgb_list
 
     train_rgb_list = build_list()
+
     return train_rgb_list
 
 def parse_directory(path,
@@ -160,11 +167,11 @@ def parse_directory(path,
 
         frame_dirs = glob.glob(osp.join(path, '*', '*'))
     elif level == 3:
-        # search for two-level directory
+        # search for three-level directory
         def locate_directory(x):
             return osp.join(osp.basename(osp.dirname(osp.dirname(x))), osp.basename(osp.dirname(x)), osp.basename(x))
 
-        frame_dirs = glob.glob(osp.join(path, '*', '*'))
+        frame_dirs = glob.glob(osp.join(path, '*', '*', '*'))
     else:
         raise ValueError('level can be only 1 or 2 or 3')
 
