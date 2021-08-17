@@ -5,15 +5,15 @@ if sys.platform == "darwin":
     print('=>>>>load data from mac platform')
     sys.path.append("/Users/zhourui/workspace/pro/source/yolov5")
 else:
-
     print('=>>>>load data from linux platform')
-    sys.path.append(r"/zhourui/workspace/pro/source/yolov5")
+    sys.path.append(r"/media/ruiming/data/workspace/pro/source/yolov5")
 
 import glob
 import argparse
 from multiprocessing import Process, Lock, Value
 import cv2
 import numpy as np
+from pathlib import Path
 
 from FaceDetection import FaceDetect
 
@@ -35,7 +35,7 @@ def parse_args():
         default=10,
         help='num workers to preprocess')
     parser.add_argument('--weights',
-                        default=r'/zhourui/workspace/pro/source/yolov5/weights/200_last.pt',
+                        default=r'/media/ruiming/data/workspace/pro/source/yolov5/weights/200_last.pt',
                         help='experiment', type=str)
     parser.add_argument('--imgsz',
                         default=640,
@@ -122,7 +122,7 @@ def main():
     args = parse_args()
 
     # get all video folders
-    video_dirs = glob.glob(os.path.join(args.src_folder, '*/'*args.level))
+    video_dirs = glob.glob(os.path.join(args.src_folder, str(Path('*/'*args.level))))
     print("Found {} videos!".format(len(video_dirs)))
 
     # multi process
