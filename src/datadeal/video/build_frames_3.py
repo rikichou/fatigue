@@ -11,6 +11,7 @@ import cv2
 from PIL import Image
 import mmcv
 
+from pathlib import Path
 import numpy as np
 
 
@@ -24,9 +25,10 @@ def extract_frame(vid_item):
     Returns:
         bool: Whether generate optical flow successfully.
     """
+    global args
     full_path, vid_path, vid_id = vid_item
-    if '/' in vid_path:
-        out_full_path = osp.join(args.out_dir, vid_path.rsplit('/', maxsplit=1)[0])
+    if str(Path('/')) in vid_path:
+        out_full_path = osp.join(args.out_dir, vid_path.rsplit(str(Path('/')), maxsplit=1)[0])
     else:
         out_full_path = args.out_dir
 
@@ -62,7 +64,8 @@ def extract_frame(vid_item):
             #              f'{out_full_path}/img_{i + 1:05d}.jpg')
             frame = cv2.cvtColor(vr_frame, cv2.COLOR_BGR2GRAY)
             im = Image.fromarray(np.uint8(frame))
-            im.save(f'{out_full_path}/img_{i + 1:05d}.jpg')
+
+            im.save(os.path.join(out_full_path, 'img_{:05d}.jpg'.format(i+1)))
         else:
             warnings.warn(
                 'Length inconsistent!'
@@ -119,10 +122,8 @@ def parse_args():
 
     return args
 
-
+args = parse_args()
 if __name__ == '__main__':
-    args = parse_args()
-
     if not osp.isdir(args.out_dir):
         print(f'Creating folder: {args.out_dir}')
         os.makedirs(args.out_dir)
@@ -130,20 +131,20 @@ if __name__ == '__main__':
     print('Reading videos from folder: ', args.src_dir)
     if args.mixed_ext:
         print('Extension of videos is mixed')
-        fullpath_list = glob.glob(args.src_dir + '/*' * args.level)
-        done_fullpath_list = glob.glob(args.out_dir + '/*' * args.level)
+        fullpath_list = glob.glob(args.src_dir + str(Path('/*' * args.level)))
+        done_fullpath_list = glob.glob(args.out_dir + str(Path('/*' * args.level)))
         fullpath_list = [x for x in fullpath_list if is_video(x)]
     else:
         print('Extension of videos: ', args.ext)
-        fullpath_list = glob.glob(args.src_dir + '/*' * args.level + '.' +
+        fullpath_list = glob.glob(args.src_dir + str(Path('/*' * args.level)) + '.' +
                                   args.ext)
-        done_fullpath_list = glob.glob(args.out_dir + '/*' * args.level)
+        done_fullpath_list = glob.glob(args.out_dir + str(Path('/*' * args.level)))
     print('Total number of videos found: ', len(fullpath_list))
 
     if args.level == 3:
         vid_list = list(
             map(
-                lambda p: os.path.join(*(p.rsplit('/', maxsplit=3)[-3:])),
+                lambda p: os.path.join(*(p.rsplit(str(Path('/')), maxsplit=3)[-3:])),
                 fullpath_list))
     elif args.level == 1:
         vid_list = list(map(osp.basename, fullpath_list))
