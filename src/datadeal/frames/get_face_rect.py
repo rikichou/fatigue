@@ -4,6 +4,9 @@ print(sys.platform)
 if sys.platform == "darwin":
     print('=>>>>load data from mac platform')
     sys.path.append("/Users/zhourui/workspace/pro/source/yolov5")
+elif sys.platform == 'win32':
+    print('=>>>>load data from window platform')
+    sys.path.append(r"D:\workspace\pro\source\yolov5")
 else:
     print('=>>>>load data from linux platform')
     sys.path.append(r"/media/ruiming/data/workspace/pro/source/yolov5")
@@ -35,7 +38,7 @@ def parse_args():
         default=10,
         help='num workers to preprocess')
     parser.add_argument('--weights',
-                        default=r'/media/ruiming/data/workspace/pro/source/yolov5/weights/200_last.pt',
+                        default=r'D:\workspace\pro\source\yolov5\weights\200_last.pt',
                         help='experiment', type=str)
     parser.add_argument('--imgsz',
                         default=640,
