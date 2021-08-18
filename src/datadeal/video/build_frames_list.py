@@ -124,7 +124,7 @@ def build_file_list(src_folder_aitxt, frame_info, shuffle=False):
         if shuffle:
             random.shuffle(rgb_list)
         if invalid_count>0:
-            print("Found {} invalid items!".format(invalid_count))
+            print("Total {} videos, Found {} invalid items!".format(len(frame_info), invalid_count))
         return rgb_list
 
     train_rgb_list = build_list()
