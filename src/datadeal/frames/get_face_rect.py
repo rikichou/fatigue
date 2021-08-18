@@ -61,7 +61,12 @@ def process_paths(paths, args, lock, counter, total_length):
         images_rect_dict = {}
         for img_path in images_path:
             # open and preprocess image
-            image = cv2.imread(img_path)
+            #image = cv2.imread(img_path) # there is some problem in Chinese char
+            image = cv2.imdecode(np.fromfile(img_path, dtype=np.uint8), 1)
+
+            if image is None:
+                print("!!!!!!!!!!!!!!!!!!!! Failed to read image ", img_path)
+                assert (False)
 
             # get face rectangle, have no face rectangle, set None
             bbox = faceDetect.detect(image)
@@ -126,7 +131,13 @@ def main():
 
     # get all video folders
     video_dirs = glob.glob(os.path.join(args.src_folder, str(Path('*/'*args.level))))
-    print("Found {} videos!".format(len(video_dirs)))
+
+    # check if dir is dealed
+    to_deal_videos = []
+    for v in video_dirs:
+        if not os.path.exists(os.path.join(v, args.out_name)):
+            to_deal_videos.append(v)
+    print("Found {} videos! {} videos not yet processed!".format(len(video_dirs), len(to_deal_videos)))
 
     # multi process
     multi_process(video_dirs, args)

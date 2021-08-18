@@ -2,6 +2,7 @@ import sys
 import os
 import numpy as np
 import argparse
+from pathlib import Path
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Build file list')
@@ -28,14 +29,24 @@ def base_info_check(args, video_path, img_format, total_num):
             return False
     return True
 
+no_facerect_count = 0
+no_file_list = []
 def face_rect_check(args, video_path, file_name):
+    global no_facerect_count
+    global no_file_list
+
     file_path = os.path.join(video_path, file_name)
+    if not os.path.exists(file_path):
+        print("ERROR! {} not found in {}".format(file_name, video_path))
+        no_file_list.append(file_path)
+        return False
     rect_infos = np.load(file_path, allow_pickle=True).item()
 
     for info in rect_infos:
         if rect_infos[info] is None:
             print("Have no face in {}:{}".format(video_path, info))
-
+            no_facerect_count += 1
+    return True
 
 def main():
     args = parse_args()
@@ -72,7 +83,10 @@ def main():
             #     img_path = os.path.join(video_path, img_format.format(idx))
             #     if not os.path.exists(img_path):
             #         print('Image not exist!!! {}'.format(img_path))
-
+    print("{} videos have no face bbox info, {} images have no face!".format(len(no_file_list), no_facerect_count))
+    print("Fllowing videos have no face bbox!")
+    for f in no_file_list:
+        print(str(Path(f)))
 
 if __name__ == '__main__':
     main()
