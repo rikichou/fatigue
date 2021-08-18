@@ -13,6 +13,8 @@ def parse_args():
     parser.add_argument(
         '--start_idx', type=int, default=1, help='image frames start index')
     parser.add_argument(
+        '--min_frames_before_fatigue', type=int, default=32, help='min frames before fatigue warning')
+    parser.add_argument(
         '--img_format', type=str, default='img_{:05}.jpg', help='image name format')
     parser.add_argument(
         '--facerect_filename', type=str, default='facerect.npy', help='numpy file include face bbox informations')
@@ -31,22 +33,40 @@ def base_info_check(args, video_path, img_format, total_num):
 
 no_facerect_count = 0
 no_file_list = []
-def face_rect_check(args, video_path, file_name):
+def get_valid_fatigue_idx(args, video_path, file_name, fatigue_idxs_str):
     global no_facerect_count
     global no_file_list
 
+    # check if numpy file is exist
     file_path = os.path.join(video_path, file_name)
     if not os.path.exists(file_path):
         print("ERROR! {} not found in {}".format(file_name, video_path))
         no_file_list.append(file_path)
-        return False
-    rect_infos = np.load(file_path, allow_pickle=True).item()
+        return []
 
+    # prepare fatigue index
+    fatigue_idxs = [int(x) for x in fatigue_idxs_str.strip().split(',')]
+
+    # prepare face rectangle idx map info
+    rect_infos = np.load(file_path, allow_pickle=True).item()
+    idx_rect_map = np.zeros(len(rect_infos), np.bool)
     for info in rect_infos:
-        if rect_infos[info] is None:
-            print("Have no face in {}:{}".format(video_path, info))
-            no_facerect_count += 1
-    return True
+        idx = int(info.split('.')[0].split('_')[1]) - 1
+        if not rect_infos[info] is None:
+            idx_rect_map[idx] = True
+
+    # index check
+    min_frames_before_fatigue = args.min_frames_before_fatigue
+    valid_idxs = []
+    for fat_end_idx in fatigue_idxs:
+        fat_end_idx -= 1
+        fat_start_idx = max(fat_end_idx - min_frames_before_fatigue + 1, 0)
+
+        if idx_rect_map[fat_start_idx:fat_end_idx + 1].sum() == min_frames_before_fatigue:
+            # valid idx
+            valid_idxs.append(fat_end_idx + 1)
+
+    return valid_idxs
 
 def main():
     args = parse_args()
@@ -56,7 +76,7 @@ def main():
             # video_prefix, total_num, label, indxs
             tmp_split = line.strip().split(',')
             line_split = tmp_split[:2]
-            fatigue_idxs = tmp_split[3]
+            fatigue_idxs_str = tmp_split[3]
 
             # base info get
             video_prefix = line_split[0]
@@ -67,22 +87,10 @@ def main():
             # base_info_check(args, video_path, args.img_format, total_num)
 
             # 2, face rectange check (check if the have no face or face rectangle in an image)
-            face_rect_check(args, video_path, args.facerect_filename)
-            # facerect_path = os.path.join(video_path, 'facerect.npy')
-            # if not os.path.exists(facerect_path):
-            #     print("Warning! Face rectangel not found {}".format(video_path))
-            #     continue
-            #
-            # rect_infos = np.load(facerect_path).item()
-            # for info in rect_infos:
-            #     if rect_infos[info] is None:
-            #         print("Have no rectangle {}:{}".format(video_path, info))
-            #
-            # # image check
-            # for idx in range(int(line_split[1])):
-            #     img_path = os.path.join(video_path, img_format.format(idx))
-            #     if not os.path.exists(img_path):
-            #         print('Image not exist!!! {}'.format(img_path))
+            fat_idxs = get_valid_fatigue_idx(args, video_path, args.facerect_filename, fatigue_idxs_str)
+            if len(fat_idxs) < 0:
+                print("Have no valid fatigue index in video {}".format(video_path))
+
     print("{} videos have no face bbox info, {} images have no face!".format(len(no_file_list), no_facerect_count))
     print("Fllowing videos have no face bbox!")
     for f in no_file_list:
