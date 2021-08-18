@@ -72,6 +72,7 @@ def get_fatigue_index_from_aitxt(filepath):
                 if frame_idx == -1:
                     continue
                 ret_list.append(frame_idx)  # 记录疲劳报警是视频中的第几帧
+                frame_idx = -1
 
     return  ret_list
 
