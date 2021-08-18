@@ -72,6 +72,7 @@ def main():
     args = parse_args()
 
     with open(args.label_path, 'r') as fp:
+        invalid_video_list = []
         for line in fp:
             # video_prefix, total_num, label, indxs
             tmp_split = line.strip().split(',')
@@ -88,13 +89,14 @@ def main():
 
             # 2, face rectange check (check if the have no face or face rectangle in an image)
             fat_idxs = get_valid_fatigue_idx(args, video_path, args.facerect_filename, fatigue_idxs_str)
-            if len(fat_idxs) < 0:
-                print("Have no valid fatigue index in video {}".format(video_path))
+            if len(fat_idxs) < 1:
+                invalid_video_list.append(video_path)
+                print("{} : {}".format(fatigue_idxs_str, video_path))
 
-    print("{} videos have no face bbox info, {} images have no face!".format(len(no_file_list), no_facerect_count))
-    print("Fllowing videos have no face bbox!")
-    for f in no_file_list:
-        print(str(Path(f)))
+        print("{} video is invalid!".format(len(invalid_video_list)))
+        # print("Fllowing videos is invalid!")
+        # for f in invalid_video_list:
+        #     print(str(Path(f)))
 
 if __name__ == '__main__':
     main()
