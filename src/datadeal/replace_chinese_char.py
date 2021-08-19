@@ -67,7 +67,7 @@ if __name__ == '__main__':
                 new_name += c
 
         if new_name != name:
-            if os.path.isdir:
+            if os.path.isdir(f):
                 print("mv {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
                 os.popen('mv {} {}'.format(f, os.path.join(os.path.dirname(f), new_name))).readlines()
             else:
