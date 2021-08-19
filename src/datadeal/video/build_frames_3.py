@@ -54,6 +54,7 @@ def extract_frame(vid_item):
             skip_dict[tmp_name] += 1
             if skip_count%1000 == 0:
                 print(skip_dict)
+                sys.stdout.flush()
             return True
 
     # for i in range(len(vr)):
