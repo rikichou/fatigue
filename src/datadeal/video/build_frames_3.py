@@ -14,7 +14,8 @@ import mmcv
 from pathlib import Path
 import numpy as np
 
-
+skip_count = 0
+skip_dict = {}
 def extract_frame(vid_item):
     """Generate optical flow using dense flow.
 
@@ -26,6 +27,7 @@ def extract_frame(vid_item):
         bool: Whether generate optical flow successfully.
     """
     global args
+    global skip_count
     full_path, vid_path, vid_id = vid_item
     if str(Path('/')) in vid_path:
         out_full_path = osp.join(args.out_dir, vid_path.rsplit(str(Path('/')), maxsplit=1)[0])
@@ -36,10 +38,24 @@ def extract_frame(vid_item):
     # Use OpenCV will not make a sub directory with the video name
     video_name = osp.splitext(osp.basename(vid_path))[0]
     out_full_path = osp.join(out_full_path, video_name)
+
+    # check if it is dealed
+    vr = mmcv.VideoReader(full_path)
     if not os.path.exists(out_full_path):
         os.makedirs(out_full_path)
+    else:
+        total_count = len(glob.glob(os.path.join(out_full_path, "*.jpg")))
+        frame_cnt = vr.frame_cnt
+        if frame_cnt <= total_count:
+            skip_count += 1
+            tmp_name = vid_path.rsplit(str(Path('/')), maxsplit=1)
+            if not tmp_name in skip_dict:
+                skip_dict[tmp_name] = 0
+            skip_dict[tmp_name] += 1
+            if skip_count%1000 == 0:
+                print(skip_dict)
+            return True
 
-    vr = mmcv.VideoReader(full_path)
     # for i in range(len(vr)):
     for i, vr_frame in enumerate(vr):
         if vr_frame is not None:
