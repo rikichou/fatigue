@@ -48,7 +48,7 @@ def extract_frame(vid_item):
         frame_cnt = vr.frame_cnt
         if frame_cnt <= total_count:
             skip_count += 1
-            tmp_name = vid_path.rsplit(str(Path('/')), maxsplit=1)
+            tmp_name = vid_path.rsplit(str(Path('/')), maxsplit=1)[0]
             if not tmp_name in skip_dict:
                 skip_dict[tmp_name] = 0
             skip_dict[tmp_name] += 1
