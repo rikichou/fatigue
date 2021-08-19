@@ -59,4 +59,5 @@ if __name__ == '__main__':
         if ord(name[0]) == 9560 and ord(name[1]) == 9524:
             # rename
             new_name = '_'+name[2:]
-            print("{} ---> {}".format(name, new_name))
+            #os.popen('mv {} {}'.format(f, os.path.join(os.path.dirname(f), new_name))).readlines()
+            print('mv {} {}'.format(f, os.path.join(os.path.dirname(f), new_name)))
