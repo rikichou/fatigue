@@ -58,7 +58,7 @@ def deal(item):
     if new_name != name:
         if os.path.isdir(f):
             print("mv {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
-            os.popen('mv \'{}\' {}'.format(f, os.path.join(os.path.dirname(f), new_name))).readlines()
+            os.popen("mv \'{}\' {}".format(f, os.path.join(os.path.dirname(f), new_name))).readlines()
         else:
             print("rename {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
             os.rename(f, os.path.join(os.path.dirname(f), new_name))
