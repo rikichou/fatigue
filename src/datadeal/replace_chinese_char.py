@@ -47,7 +47,10 @@ def deal(item):
 
     new_name = ''
     for c in name:
+        # check chinese code
         if u'\u4e00' <= c <= u'\u9fff':
+            new_name += '_'
+        elif c==' ':
             new_name += '_'
         else:
             new_name += c
