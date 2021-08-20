@@ -56,8 +56,6 @@ if __name__ == '__main__':
     # copy data
     for idx,f in enumerate(fullpath_list):
         name = os.path.basename(f)
-        if '.h264' in name:
-            continue
 
         new_name = ''
         for c in name:
