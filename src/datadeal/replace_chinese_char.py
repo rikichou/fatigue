@@ -40,6 +40,26 @@ def parse_args():
 
     return args
 
+def deal(item):
+    # copy data
+    f,idx = item
+    name = os.path.basename(f)
+
+    new_name = ''
+    for c in name:
+        if u'\u4e00' <= c <= u'\u9fff':
+            new_name += '_'
+        else:
+            new_name += c
+
+    if new_name != name:
+        if os.path.isdir(f):
+            print("mv {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
+            os.popen('mv {} {}'.format(f, os.path.join(os.path.dirname(f), new_name))).readlines()
+        else:
+            print("rename {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
+            os.rename(f, os.path.join(os.path.dirname(f), new_name))
+
 args = parse_args()
 if __name__ == '__main__':
     print('Reading npy from folder: ', args.src_dir)
@@ -48,26 +68,7 @@ if __name__ == '__main__':
     print('Total number of files: ', len(fullpath_list))
 
 
-    # with Pool(args.num_worker) as pool:
-    #     r = list(tqdm.tqdm(pool.imap(
-    #         deal,
-    #         zip(fullpath_list, range(len(fullpath_list))))))
-
-    # copy data
-    for idx,f in enumerate(fullpath_list):
-        name = os.path.basename(f)
-
-        new_name = ''
-        for c in name:
-            if u'\u4e00' <= c <= u'\u9fff':
-                new_name += '_'
-            else:
-                new_name += c
-
-        if new_name != name:
-            if os.path.isdir(f):
-                print("mv {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
-                os.popen('mv {} {}'.format(f, os.path.join(os.path.dirname(f), new_name))).readlines()
-            else:
-                print("rename {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
-                os.rename(f, os.path.join(os.path.dirname(f), new_name))
+    with Pool(args.num_worker) as pool:
+        r = list(tqdm.tqdm(pool.imap(
+            deal,
+            zip(fullpath_list, range(len(fullpath_list))))))
