@@ -52,13 +52,22 @@ def deal(item):
             new_name += '_'
         elif c==' ':
             new_name += '_'
+        elif ord(c) == 9560:
+            new_name += '_'
+        elif ord(c) == 9524:
+            continue
+        elif ord(c) == 9575:
+            new_name += '_'
+        elif ord(c) == 1094:
+            continue
         else:
             new_name += c
 
     if new_name != name:
         if os.path.isdir(f):
             print("mv {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
-            os.popen("mv \'{}\' {}".format(f, os.path.join(os.path.dirname(f), new_name))).readlines()
+            #os.popen("mv \'{}\' {}".format(f, os.path.join(os.path.dirname(f), new_name))).readlines()
+            shutil.move(f, os.path.join(os.path.dirname(f), new_name))
         else:
             print("rename {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
             os.rename(f, os.path.join(os.path.dirname(f), new_name))
