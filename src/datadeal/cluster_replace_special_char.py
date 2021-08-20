@@ -46,7 +46,7 @@ def deal(item):
     name = os.path.basename(f)
 
     new_name = ''
-    if name[0]>127 and name[1]>127:
+    if ord(name[0])>127 and ord(name[1])>127:
         new_name = '_' + name[2:]
         if os.path.isdir(f):
             print("mv {} : {} ---> {}".format(os.path.dirname(f), name, new_name))
