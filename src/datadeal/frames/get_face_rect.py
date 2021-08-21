@@ -134,9 +134,11 @@ def main():
 
     # check if dir is dealed
     to_deal_videos = []
-    for v in video_dirs:
+    for idx,v in enumerate(video_dirs):
         if not os.path.exists(os.path.join(v, args.out_name)):
             to_deal_videos.append(v)
+        if idx%1000 == 0:
+            print("Check is dealed {}/{}".format(idx+1, len(video_dirs)))
     print("Found {} videos! {} videos not yet processed!".format(len(video_dirs), len(to_deal_videos)))
 
     # multi process
