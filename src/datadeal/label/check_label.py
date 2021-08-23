@@ -106,6 +106,7 @@ def main():
 
             # 2, face rectange check (check if the have no face or face rectangle in an image)
             fat_idxs = get_valid_fatigue_idx(args, video_path, args.facerect_filename, fatigue_idxs_str)
+            print(fatigue_idxs_str, fat_idxs)
             if len(fat_idxs) < 1:
                 #print("{} : {}".format(fatigue_idxs_str, video_path))
                 invalid_info.append("{} : {}\n".format(fatigue_idxs_str, video_path))
