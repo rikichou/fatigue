@@ -46,6 +46,11 @@ if __name__ == '__main__':
         print("Have no facerect.py found in ", video_dir)
     infos_dict = np.load(label_file_path, allow_pickle=True).item()
 
+    out_root_dir = os.path.join(args.out_dir, os.path.basename(video_dir))
+    if not osp.isdir(out_root_dir):
+        print(f'Creating folder: {out_root_dir}')
+        os.makedirs(out_root_dir)
+
     for item in infos_dict:
         sx,sy,ex,ey = infos_dict[item]
         img_path = os.path.join(video_dir, item)
@@ -53,4 +58,4 @@ if __name__ == '__main__':
         image = cv2.imdecode(np.fromfile(img_path, dtype=np.uint8), 1)
 
         cv2.rectangle(image, (sx,sy), (ex,ey), (255,0,0), 1)
-        cv2.imwrite(os.path.join(args.out_dir, item), image)
+        cv2.imwrite(os.path.join(out_root_dir, item), image)
