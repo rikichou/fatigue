@@ -6,7 +6,8 @@ import os.path as osp
 import random
 import fnmatch
 
-label_map = {'fatigue_close':1, 'fatigue_look_down':0, 'others':2, 'yawn':2}
+#label_map = {'fatigue_close':1, 'fatigue_look_down':0, 'others':2, 'yawn':2}
+label_map = {'fatigue_close':1, 'fatigue_look_down':0}
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Build file list')
@@ -102,6 +103,15 @@ def build_file_list(src_folder_aitxt, frame_info, shuffle=False):
                 file list for flow.
         """
         invalid_count = 0
+        statistics_info = {}
+
+        statistics_info['total'] = len(frame_info)
+        statistics_info['no_fatigue_warning'] = []
+        statistics_info['no_aitxt'] = []
+        statistics_info[0] = 0
+        statistics_info[1] = 0
+        statistics_info[2] = 0
+
         rgb_list, flow_list = list(), list()
         for item in frame_info:
             video_prefix = item
@@ -109,22 +119,30 @@ def build_file_list(src_folder_aitxt, frame_info, shuffle=False):
             # get fatigue index in video
             video_aitxt_path = os.path.join(src_folder_aitxt, video_prefix+'.aitxt')
             if not os.path.exists(video_aitxt_path):
-                print("video aitxt is not found! {}".format(video_aitxt_path))
-                invalid_count += 1
+                #print("video aitxt is not found! {}".format(video_aitxt_path))
+                statistics_info['no_aitxt'].append(video_aitxt_path)
                 continue
             fatigue_idx_list = get_fatigue_index_from_aitxt(video_aitxt_path)
             if len(fatigue_idx_list) < 1:
-                print("Have no Fatigue warning in {}".format(video_aitxt_path))
-                invalid_count += 1
+                #print("Have no Fatigue warning in {}".format(video_aitxt_path))
+                statistics_info['no_fatigue_warning'].append(video_aitxt_path)
                 continue
 
             # video_prefix, total_frame_num, label, face_sx face_sy face_ex face_ey, fatigue indexes
             rgb_list.append('{},{},{},{}\n'.format(item, frame_info[item][1], frame_info[item][2], ','.join(str(x+1) for x in fatigue_idx_list)))
+            statistics_info[frame_info[item][2]] += 1
 
         if shuffle:
             random.shuffle(rgb_list)
-        if invalid_count>0:
-            print("Total {} videos, Found {} invalid items!".format(len(frame_info), invalid_count))
+        print("Statistics : \nTotal video {}\nNo fatigue warning {}\nNo aitxt {}\nlook_down {}\nclose {}\nother {}\n".format(
+            statistics_info['total'],
+            len(statistics_info['no_fatigue_warning']),
+            len(statistics_info['no_aitxt']),
+            statistics_info[0],
+            statistics_info[1],
+            statistics_info[2]
+        ))
+
         return rgb_list
 
     train_rgb_list = build_list()
@@ -193,12 +211,16 @@ def parse_directory(path,
     # check RGB
     frame_dict = {}
     for i, frame_dir in enumerate(frame_dirs):
+        label_str = os.path.basename(os.path.dirname(frame_dir))
+        if label_str not in label_map:
+            print("{} not label map!!".format(label_str))
+            continue
         total_num = count_files(frame_dir,
                                 (rgb_prefix, 'hahahah', 'hohhohoh'))
         dir_name = locate_directory(frame_dir)
-        label = label_map[os.path.basename(os.path.dirname(frame_dir))]
+        label = label_map[label_str]
 
-        if i % 200 == 0:
+        if i % 10000 == 0:
             print(f'{i} videos parsed')
         frame_dict[dir_name] = (frame_dir, total_num[0], label)
 
