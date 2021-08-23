@@ -292,6 +292,7 @@ def main():
         raise ValueError('level can be only 1 or 2 or 3')
 
     # multi thread
+    frame_dirs = frame_dirs[:100]
     multi_process(frame_dirs, args)
 
 
