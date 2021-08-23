@@ -98,7 +98,7 @@ def main():
             # base info get
             video_prefix = line_split[0]
             total_num = int(line_split[1])
-            label = int(line_split[1])
+            label = int(line_split[2])
             video_path = os.path.join(args.src_folder, video_prefix)
 
             # 1, base info check (check if image missing)
