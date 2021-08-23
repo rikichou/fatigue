@@ -237,6 +237,7 @@ def process_paths(frame_dirs, fp, args, lock, counter, total_length):
     lock.acquire()
     try:
         # write info to fp
+        print("Lines ", lists)
         fp.writelines(lists)
         # p_bar.update(1)
         counter.value += len(frame_dirs)
