@@ -9,6 +9,7 @@ from multiprocessing import Process, Lock, Value
 
 #label_map = {'fatigue_close':1, 'fatigue_look_down':0, 'others':2, 'yawn':2}
 label_map = {'fatigue_close':1, 'fatigue_look_down':0}
+total_lines = []
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Build file list')
@@ -234,11 +235,11 @@ def process_paths(frame_dirs, fp, args, lock, counter, total_length):
     lists = build_file_list(args.src_folder_aitxt, frame_info, shuffle=args.shuffle)
 
     # counter
+    global total_lines
     lock.acquire()
     try:
         # write info to fp
-        print("Lines ", lists)
-        print("ret ", fp.writelines(lists))
+        total_lines.extend(lists)
         # p_bar.update(1)
         counter.value += len(frame_dirs)
         print(f"{counter.value}/{total_length} done.")
@@ -276,7 +277,8 @@ def multi_process(frame_dirs, args):
         p.join()
 
     # release file handle
-    fp.writelines(['123455\n'])
+    global total_lines
+    fp.writelines(total_lines)
     fp.close()
 
 def main():
