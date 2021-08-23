@@ -234,14 +234,12 @@ def process_paths(frame_dirs, args, lock, counter, total_lines, total_length):
 
     lists = build_file_list(args.src_folder_aitxt, frame_info, shuffle=args.shuffle)
 
-
-    with total_lines.get_lock():
-        total_lines.extend(lists)
     # counter
     lock.acquire()
     try:
         # p_bar.update(1)
         counter.value += len(frame_dirs)
+        total_lines.extend(lists)
         print(f"{counter.value}/{total_length} done.")
     finally:
         lock.release()
