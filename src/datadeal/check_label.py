@@ -11,6 +11,8 @@ def parse_args():
     parser.add_argument(
         'label_path', type=str, help='label path')
     parser.add_argument(
+        'message_save_file_path', type=str, help='label path')
+    parser.add_argument(
         '--start_idx', type=int, default=1, help='image frames start index')
     parser.add_argument(
         '--min_frames_before_fatigue', type=int, default=32, help='min frames before fatigue warning')
@@ -71,8 +73,20 @@ def get_valid_fatigue_idx(args, video_path, file_name, fatigue_idxs_str):
 def main():
     args = parse_args()
 
+    # statistics info
+    statistics_info = {}
+    statistics_info['total'] = 0
+    statistics_info['invalid'] = 0
+
+    statistics_info[0] = {}
+    statistics_info[1] = {}
+    statistics_info[0]['num'] = 0
+    statistics_info[0]['invalid'] = 0
+    statistics_info[1]['num'] = 0
+    statistics_info[1]['invalid'] = 0
+
+    invalid_info = []
     with open(args.label_path, 'r') as fp:
-        invalid_video_list = []
         for line in fp:
             # video_prefix, total_num, label, indxs
             tmp_split = line.strip().split(',')
@@ -82,6 +96,7 @@ def main():
             # base info get
             video_prefix = line_split[0]
             total_num = int(line_split[1])
+            label = int(line_split[1])
             video_path = os.path.join(args.src_folder, video_prefix)
 
             # 1, base info check (check if image missing)
@@ -90,13 +105,23 @@ def main():
             # 2, face rectange check (check if the have no face or face rectangle in an image)
             fat_idxs = get_valid_fatigue_idx(args, video_path, args.facerect_filename, fatigue_idxs_str)
             if len(fat_idxs) < 1:
-                invalid_video_list.append(video_path)
-                print("{} : {}".format(fatigue_idxs_str, video_path))
+                #print("{} : {}".format(fatigue_idxs_str, video_path))
+                invalid_info.append("{} : {}\n".format(fatigue_idxs_str, video_path))
 
-        print("{} video is invalid!".format(len(invalid_video_list)))
-        # print("Fllowing videos is invalid!")
-        # for f in invalid_video_list:
-        #     print(str(Path(f)))
+                # statistics
+                statistics_info['invalid'] += 1
+                statistics_info[label]['invalid'] += 1
+
+            # statistics
+            statistics_info['total'] += 1
+            statistics_info[label]['num'] += 1
+        print("Total {}\nInvalid {}\n\nFatigue_close {}\nInvalid {}\nValid {}\n\nFatigue_look_down {}\nInvalid {}\nValid {}".format(
+            statistics_info['total'], statistics_info['invalid'],
+            statistics_info[1]['num'], statistics_info[1]['invalid'], statistics_info[1]['num']-statistics_info[1]['invalid'],
+            statistics_info[0]['num'], statistics_info[0]['invalid'], statistics_info[0]['num'] - statistics_info[0]['invalid'],
+        ))
+        with open(args.message_save_file_path, 'w') as fp:
+            fp.writelines(invalid_info)
 
 if __name__ == '__main__':
     main()
