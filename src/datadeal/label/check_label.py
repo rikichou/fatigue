@@ -82,8 +82,10 @@ def main():
     statistics_info[1] = {}
     statistics_info[0]['num'] = 0
     statistics_info[0]['invalid'] = 0
+    statistics_info[0]['clips'] = 0
     statistics_info[1]['num'] = 0
     statistics_info[1]['invalid'] = 0
+    statistics_info[1]['clips'] = 0
 
     invalid_info = []
     with open(args.label_path, 'r') as fp:
@@ -115,10 +117,12 @@ def main():
             # statistics
             statistics_info['total'] += 1
             statistics_info[label]['num'] += 1
-        print("Total {}\nInvalid {}\n\nFatigue_close {}\nInvalid {}\nValid {}\n\nFatigue_look_down {}\nInvalid {}\nValid {}".format(
+            statistics_info[label]['clips'] += len(fat_idxs)
+
+        print("Total {}\nInvalid {}\n\nFatigue_close {}\nInvalid {}\nValid {}\nClips {}, Clips_per_Video {}\n\nFatigue_look_down {}\nInvalid {}\nValid {}\nClips {}, Clips_per_Video {}".format(
             statistics_info['total'], statistics_info['invalid'],
-            statistics_info[1]['num'], statistics_info[1]['invalid'], statistics_info[1]['num']-statistics_info[1]['invalid'],
-            statistics_info[0]['num'], statistics_info[0]['invalid'], statistics_info[0]['num'] - statistics_info[0]['invalid'],
+            statistics_info[1]['num'], statistics_info[1]['invalid'], statistics_info[1]['num']-statistics_info[1]['invalid'], statistics_info[1]['clips'], statistics_info[1]['clips']/(statistics_info[1]['num']-statistics_info[1]['invalid']),
+            statistics_info[0]['num'], statistics_info[0]['invalid'], statistics_info[0]['num'] - statistics_info[0]['invalid'], statistics_info[0]['clips'], statistics_info[0]['clips']/(statistics_info[0]['num']-statistics_info[0]['invalid']),
         ))
         with open(args.message_save_file_path, 'w') as fp:
             fp.writelines(invalid_info)
