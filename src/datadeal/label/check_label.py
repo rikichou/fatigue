@@ -93,7 +93,7 @@ def main():
             # video_prefix, total_num, label, indxs
             tmp_split = line.strip().split(',')
             line_split = tmp_split[:3]
-            fatigue_idxs_str = tmp_split[3]
+            fatigue_idxs_str = tmp_split[3:]
 
             # base info get
             video_prefix = line_split[0]
