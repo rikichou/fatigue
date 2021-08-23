@@ -238,7 +238,9 @@ def process_paths(frame_dirs, fp, args, lock, counter, total_length):
     try:
         # write info to fp
         print("Lines ", lists)
-        fp.writelines(lists)
+        for l in lists:
+            fp.writeline(l)
+            #fp.writelines(lists)
         # p_bar.update(1)
         counter.value += len(frame_dirs)
         print(f"{counter.value}/{total_length} done.")
