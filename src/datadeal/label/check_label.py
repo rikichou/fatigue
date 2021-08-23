@@ -47,7 +47,7 @@ def get_valid_fatigue_idx(args, video_path, file_name, fatigue_idxs_str):
         return []
 
     # prepare fatigue index
-    fatigue_idxs = [int(x) for x in fatigue_idxs_str.strip().split(',')]
+    fatigue_idxs = [int(x) for x in fatigue_idxs_str]
 
     # prepare face rectangle idx map info
     rect_infos = np.load(file_path, allow_pickle=True).item()
