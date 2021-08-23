@@ -40,7 +40,10 @@ if __name__ == '__main__':
         video_dir = os.path.join(args.src_dir, random.choice(fs))
     else:
         video_dir = args.src_dir
+    print("Video dir : ", video_dir)
     label_file_path = os.path.join(video_dir, 'facerect.npy')
+    if not os.path.exists(label_file_path):
+        print("Have no facerect.py found in ", video_dir)
     infos_dict = np.load(label_file_path, allow_pickle=True).item()
 
     for item in infos_dict:
