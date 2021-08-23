@@ -276,6 +276,7 @@ def multi_process(frame_dirs, args):
         p.join()
 
     # release file handle
+    fp.writelines(['123455\n'])
     fp.close()
 
 def main():
