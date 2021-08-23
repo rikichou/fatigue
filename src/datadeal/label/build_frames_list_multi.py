@@ -5,11 +5,11 @@ import json
 import os.path as osp
 import random
 import fnmatch
-from multiprocessing import Process, Lock, Value
+import multiprocessing
+from multiprocessing import Process, Lock, Value, Array
 
 #label_map = {'fatigue_close':1, 'fatigue_look_down':0, 'others':2, 'yawn':2}
 label_map = {'fatigue_close':1, 'fatigue_look_down':0}
-total_lines = []
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Build file list')
@@ -225,7 +225,7 @@ def parse_directory(frame_dirs,
 
     return frame_dict
 
-def process_paths(frame_dirs, fp, args, lock, counter, total_length):
+def process_paths(frame_dirs, args, lock, counter, total_lines, total_length):
     # get frames info
     frame_info = parse_directory(
         frame_dirs,
@@ -234,12 +234,12 @@ def process_paths(frame_dirs, fp, args, lock, counter, total_length):
 
     lists = build_file_list(args.src_folder_aitxt, frame_info, shuffle=args.shuffle)
 
+
+    with total_lines.get_lock():
+        total_lines.extend(lists)
     # counter
-    global total_lines
     lock.acquire()
     try:
-        # write info to fp
-        total_lines.extend(lists)
         # p_bar.update(1)
         counter.value += len(frame_dirs)
         print(f"{counter.value}/{total_length} done.")
@@ -262,6 +262,7 @@ def multi_process(frame_dirs, args):
     process_pool = []
     lock = Lock()
     counter = Value("i", 0)
+    total_lines = multiprocessing.Manager().list()
     for i in range(process_num):
         start_index = grid_size * i
         if i != process_num - 1:
@@ -269,7 +270,7 @@ def multi_process(frame_dirs, args):
         else:
             end_index = len(files)
         pw = Process(target=process_paths,
-                     args=(files[start_index:end_index], fp, args, lock, counter, len(files)))
+                     args=(files[start_index:end_index], args, lock, counter, total_lines, len(files)))
         pw.start()
         process_pool.append(pw)
 
@@ -277,8 +278,6 @@ def multi_process(frame_dirs, args):
         p.join()
 
     # release file handle
-    global total_lines
-    print(total_lines)
     fp.writelines(total_lines)
     fp.close()
 
