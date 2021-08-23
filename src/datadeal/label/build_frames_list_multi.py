@@ -278,6 +278,7 @@ def multi_process(frame_dirs, args):
 
     # release file handle
     global total_lines
+    print(total_lines)
     fp.writelines(total_lines)
     fp.close()
 
