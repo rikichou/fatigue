@@ -10,13 +10,11 @@ from tqdm import tqdm
 def parse_args():
     parser = argparse.ArgumentParser(description='Build file list')
     parser.add_argument(
-        'src_dir', type=str, help='root directory for the frames')
-    parser.add_argument(
         'ann_file', type=str, help='dir level')
     parser.add_argument(
         'data_prefix', type=str, default='/zhourui/workspace/pro/fatigue/data/rawframes/valid', help='dir level')
     parser.add_argument(
-        'min_frames_before_fatigue', type=int, default=48, help='dir level')
+        '--min_frames_before_fatigue', type=int, default=48, help='dir level')
 
     args = parser.parse_args()
 
@@ -47,6 +45,7 @@ def get_valid_fatigue_idx(rect_infos, min_frames_before_fatigue, fatigue_idxs_st
         if idx_rect_map[fat_start_idx:fat_end_idx + 1].sum() == min_frames_before_fatigue:
             # valid idx
             valid_idxs.append(fat_end_idx + 1)
+    return valid_idxs
 
 def load_annotations(args):
     video_infos = []
