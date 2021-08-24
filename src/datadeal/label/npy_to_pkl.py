@@ -91,7 +91,7 @@ def main():
     print("Glob get {} files, Time cost {} seconds".format(len(files), time.time()-st))
 
     with Pool(args.num_worker) as pool:
-        r = list(tqdm.tqdm(pool.imap(
+        r = list(tqdm(pool.imap(
             get_pkl,files)))
 
 if __name__ == '__main__':
