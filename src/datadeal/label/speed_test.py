@@ -70,6 +70,7 @@ def main():
 
     # read all npy
     st = time.time()
+    print("Start to get all {} files".format(args.ext))
     files = glob.glob(args.src_dir + str(Path('/*' * args.level)) + '.' +
               args.ext)
     print("Glob get {} files, Time cost {} seconds".format(len(files), time.time()-st))

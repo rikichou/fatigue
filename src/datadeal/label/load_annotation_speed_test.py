@@ -12,7 +12,7 @@ def parse_args():
     parser.add_argument(
         'ann_file', type=str, help='dir level')
     parser.add_argument(
-        'data_prefix', type=str, default='/zhourui/workspace/pro/fatigue/data/rawframes/valid', help='dir level')
+        '--data_prefix', type=str, default='/zhourui/workspace/pro/fatigue/data/rawframes/valid', help='dir level')
     parser.add_argument(
         '--min_frames_before_fatigue', type=int, default=48, help='dir level')
 

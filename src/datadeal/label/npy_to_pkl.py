@@ -72,13 +72,12 @@ def get_valid_fatigue_idx(args, video_path, file_name, fatigue_idxs_str):
 
     return valid_idxs
 
-def get_pkl(np_files):
-    for f in np_files:
-        np_info = np.load(f, allow_pickle=True).item()
+def get_pkl(f):
+    np_info = np.load(f, allow_pickle=True).item()
 
-        pkl_file = os.path.join(os.path.dirname(f), 'facerect.pkl')
-        with open(pkl_file, 'wb') as fp:
-            pickle.dump(np_info, fp)
+    pkl_file = os.path.join(os.path.dirname(f), 'facerect.pkl')
+    with open(pkl_file, 'wb') as fp:
+        pickle.dump(np_info, fp)
 
 def main():
     args = parse_args()
