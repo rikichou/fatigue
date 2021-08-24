@@ -73,7 +73,7 @@ def load_annotations(args):
     time_cose_ana['t4-t5'] = 0
 
     with open(args.ann_file, 'r') as fin:
-        for line in fin:
+        for idx,line in enumerate(fin):
             t1 = time.time()
             # video_prefix, total_frame_num, label, fatigue indexes
             tmp_split = line.strip().split(',')
@@ -135,6 +135,9 @@ def load_annotations(args):
             video_infos.append(infos)
             # statistics
             statistics_info[fat_label]['clips'] += len(fat_idxs)
+
+            if idx%200 == 0:
+                print(time_cose_ana)
 
     print(
         "Total {}\nInvalid {}\n\nFatigue_close {}\nInvalid {}\nValid {}\nClips {}, Clips_per_Video {}\n\nFatigue_look_down {}\nInvalid {}\nValid {}\nClips {}, Clips_per_Video {}".format(
