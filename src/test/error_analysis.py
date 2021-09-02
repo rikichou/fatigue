@@ -34,7 +34,7 @@ if __name__ == '__main__':
         assert len(results) == len(video_infos), 'results length({}) != video_infos length({})'.format(len(results),
                                                                                                        len(video_infos))
         preds = np.argmax(results, axis=1)
-        for vinfo, pred in tqdm(zip(video_infos, preds)):
+        for vinfo, pred in tqdm(list(zip(video_infos, preds))):
             sample = vinfo[0] if test_one else vinfo
             # check if correct
             if pred != sample['label']:
