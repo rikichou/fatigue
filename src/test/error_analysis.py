@@ -9,36 +9,6 @@ def parse_args():
     parser.add_argument('results_file', type=str, help='results_file')
     parser.add_argument('data_root_dir', type=str, help='data_root_dir')
     parser.add_argument('out_root_dir', type=str, help='out_root_dir')
-    parser.add_argument(
-        '--level',
-        type=int,
-        choices=[1, 2, 3],
-        default=3,
-        help='directory level of data')
-    parser.add_argument(
-        '--num-worker',
-        type=int,
-        default=8,
-        help='number of workers to build rawframes')
-    parser.add_argument(
-        '--ext',
-        type=str,
-        default='avi',
-        choices=['avi', 'mp4', 'webm'],
-        help='video file extensions')
-    parser.add_argument(
-        '--mixed-ext',
-        action='store_true',
-        help='process video files with mixed extensions')
-    parser.add_argument(
-        '--new-width', type=int, default=0, help='resize image width')
-    parser.add_argument(
-        '--new-height', type=int, default=0, help='resize image height')
-    parser.add_argument(
-        '--new-short',
-        type=int,
-        default=0,
-        help='resize image short side length keeping ratio')
 
     args = parser.parse_args()
 
