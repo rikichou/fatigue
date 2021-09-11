@@ -41,7 +41,7 @@ if __name__ == '__main__':
             if pred != sample['label']:
                 # get video path
                 data_video_path = sample['frame_dir']
-                out_video_path = os.path.join(out_root_dir, sample['label'], '/'.join(data_video_path.split('/')[-3:]))
+                out_video_path = os.path.join(out_root_dir, str(sample['label']), '/'.join(data_video_path.split('/')[-3:]))
                 if not os.path.exists(out_video_path):
                     os.makedirs(out_video_path)
                     # copy all images to video dir
