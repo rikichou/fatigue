@@ -95,7 +95,7 @@ def process_videos(videos, args, lock, counter, total_length):
         # video writer
         out_video_file = os.path.join(args.out_dir, 'face_'+os.path.basename(v))
         fourcc = 'XVID'
-        vwriter = cv2.VideoWriter(out_video_file, VideoWriter_fourcc(*fourcc), fps)
+        vwriter = cv2.VideoWriter(out_video_file, VideoWriter_fourcc(*fourcc), fps, (args.size, args.size))
 
         for i, vr_frame in enumerate(vr):
             if vr_frame is not None:
