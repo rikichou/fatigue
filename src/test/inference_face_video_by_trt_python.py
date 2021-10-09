@@ -112,6 +112,8 @@ def main():
     st = time.time()
     multi_process(videos, args)
     tcost = time.time()-st
-    print("Dealed {} videos cost {:.4f}(average {:.4f}s/video)".format(len(videos), tcost, tcost/len(videos)))
+
+    if len(videos)>0:
+        print("Dealed {} videos cost {:.4f}(average {:.4f}s/video)".format(len(videos), tcost, tcost/len(videos)))
 if __name__ == '__main__':
     main()
