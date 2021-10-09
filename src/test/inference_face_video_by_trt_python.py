@@ -2,6 +2,7 @@ import os
 import time
 from multiprocessing import Process, Lock, Value
 
+import numpy as np
 from pathlib import Path
 import argparse
 import glob
@@ -19,12 +20,14 @@ def parse_args():
     parser.add_argument('src_folder',
                         type=str,
                         help='face video path')
+    parser.add_argument('out_file_path',
+                        type=str,
+                        help='result path')
     parser.add_argument('--model_path', default='fatigue_face_video_tensorrt_python/model/fatigue_r50_clean_withnormal/fatigue_r50_clean_withnormal_fp16.trt', type=str, help='tensorrt model path')
     parser.add_argument('--config_path', default='fatigue_face_video_tensorrt_python/model/fatigue_r50_clean_withnormal/fatigue_r50_clean_inference.py', type=str, help='mmaction inference config path')
     parser.add_argument(
         '--level',
         type=int,
-        choices=[1, 2, 3],
         default=3,
         help='directory level of data')
     parser.add_argument(
@@ -101,14 +104,13 @@ def multi_process(videos, args):
         for p in process_pool:
             p.join()
 
-    print(results)
+    np.save(args.out_file_path, results)
 
 def main():
     args = parse_args()
 
     # get all video folders
     videos = glob.glob(os.path.join(args.src_folder, str(Path('*/'*args.level))+'.'+args.ext))
-    videos = videos[:10]
     print("Found {} videos!".format(len(videos)))
 
     # multi process
