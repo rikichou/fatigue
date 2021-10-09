@@ -16,7 +16,7 @@ config_path = '/home/ruiming/workspace/pro/source/mmaction2/configs/recognition/
 
 def parse_args():
     parser = argparse.ArgumentParser(description='extract optical flows')
-    parser.add_argument('test_video_path',
+    parser.add_argument('src_folder',
                         type=str,
                         help='face video path')
     parser.add_argument('--model_path', default='fatigue_face_video_tensorrt_python/model/fatigue_r50_clean_withnormal/fatigue_r50_clean_withnormal_fp16.trt', type=str, help='tensorrt model path')
