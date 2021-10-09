@@ -29,7 +29,7 @@ def parse_args():
     parser.add_argument(
         'out_dir', type=str, help='out video dir')
     parser.add_argument(
-        '--size', type=int, default=112, help='out video dir')
+        '--size', type=int, default=224, help='out video dir')
     parser.add_argument(
         '--level',
         type=int,
@@ -93,7 +93,15 @@ def process_videos(videos, args, lock, counter, total_length):
         vr = mmcv.VideoReader(v)
         fps = vr.fps
         # video writer
-        out_video_file = os.path.join(args.out_dir, 'face_'+os.path.basename(v))
+        if args.level == 1:
+            out_video_file = os.path.join(args.out_dir, os.path.basename(v))
+        else:
+            sub_src_video_dir = os.path.dirname(v.replace(args.src_folder, ''))
+            out_video_dir = os.path.join(args.out_dir, sub_src_video_dir)
+            if not os.path.exists(out_video_dir):
+                os.makedirs(out_video_dir)
+            out_video_file = os.path.join(out_video_dir, os.path.basename(v))
+
         fourcc = 'XVID'
         vwriter = cv2.VideoWriter(out_video_file, VideoWriter_fourcc(*fourcc), fps, (args.size, args.size))
 
