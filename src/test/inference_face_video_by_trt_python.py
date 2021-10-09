@@ -84,19 +84,22 @@ def multi_process(videos, args):
     process_pool = []
     lock = Lock()
     counter = Value("i", 0)
-    for i in range(process_num):
-        start_index = grid_size * i
-        if i != process_num - 1:
-            end_index = grid_size * (i + 1)
-        else:
-            end_index = len(files)
-        pw = Process(target=process_videos,
-                     args=(files[start_index:end_index], args, results, lock, counter, len(files)))
-        pw.start()
-        process_pool.append(pw)
+    if process_num == 1:
+        process_videos(videos, args, results, lock, counter, len(files))
+    else:
+        for i in range(process_num):
+            start_index = grid_size * i
+            if i != process_num - 1:
+                end_index = grid_size * (i + 1)
+            else:
+                end_index = len(files)
+            pw = Process(target=process_videos,
+                         args=(files[start_index:end_index], args, results, lock, counter, len(files)))
+            pw.start()
+            process_pool.append(pw)
 
-    for p in process_pool:
-        p.join()
+        for p in process_pool:
+            p.join()
 
     print(results)
 
