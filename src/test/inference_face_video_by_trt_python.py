@@ -105,6 +105,7 @@ def multi_process(videos, args):
             p.join()
 
     np.save(args.out_file_path, results)
+    print(results)
 
 def main():
     args = parse_args()
