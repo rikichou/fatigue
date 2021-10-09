@@ -1,11 +1,12 @@
 import os
+import time
 from multiprocessing import Process, Lock, Value
 
 from pathlib import Path
 import argparse
 import glob
 
-import fatigue
+from fatigue_face_video_tensorrt_python import fatigue
 
 test_video_path = '/home/ruiming/workspace/pro/fatigue/data/test/video/lookdown_face/face_02_03_0_0_28716582.avi'
 
@@ -18,8 +19,8 @@ def parse_args():
     parser.add_argument('test_video_path',
                         type=str,
                         help='face video path')
-    parser.add_argument('--model_path', default='model/fatigue_r50_clean_withnormal/fatigue_r50_clean_withnormal_fp16.trt', type=str, help='tensorrt model path')
-    parser.add_argument('--config_path', default='model/fatigue_r50_clean_withnormal/fatigue_r50_clean_inference.py', type=str, help='mmaction inference config path')
+    parser.add_argument('--model_path', default='fatigue_face_video_tensorrt_python/model/fatigue_r50_clean_withnormal/fatigue_r50_clean_withnormal_fp16.trt', type=str, help='tensorrt model path')
+    parser.add_argument('--config_path', default='fatigue_face_video_tensorrt_python/model/fatigue_r50_clean_withnormal/fatigue_r50_clean_inference.py', type=str, help='mmaction inference config path')
     parser.add_argument(
         '--level',
         type=int,
@@ -104,10 +105,13 @@ def main():
 
     # get all video folders
     videos = glob.glob(os.path.join(args.src_folder, str(Path('*/'*args.level))+'.'+args.ext))
+    videos = videos[:10]
     print("Found {} videos!".format(len(videos)))
 
     # multi process
+    st = time.time()
     multi_process(videos, args)
-
+    tcost = time.time()-st
+    print("Dealed {} videos cost {:.4f}(average {:.4f}s/video)".format(len(videos), tcost, tcost/len(videos)))
 if __name__ == '__main__':
     main()
