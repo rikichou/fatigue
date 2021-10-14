@@ -163,6 +163,11 @@ if __name__ == '__main__':
             map(
                 lambda p: os.path.join(*(p.rsplit(str(Path('/')), maxsplit=3)[-3:])),
                 fullpath_list))
+    if args.level == 2:
+        vid_list = list(
+            map(
+                lambda p: os.path.join(*(p.rsplit(str(Path('/')), maxsplit=2)[-2:])),
+                fullpath_list))
     elif args.level == 1:
         vid_list = list(map(osp.basename, fullpath_list))
 
