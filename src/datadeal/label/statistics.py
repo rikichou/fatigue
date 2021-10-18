@@ -2,7 +2,7 @@ import json
 
 #JSON_FILE = '/Users/zhourui/Downloads/test.json'
 #JSON_FILE = '/Users/zhourui/Downloads/test_merge.json'
-JSON_FILE = '/Users/zhourui/Downloads/20210824_fatigue_pl_less_than_50_fatigue_full_info_all_path.json'
+JSON_FILE = '/zhourui/workspace/pro/fatigue/data/clean/fatigue_anns/20211018_fatigue_lookdown_squint.json'
 
 with open(JSON_FILE, 'r') as f:
     infos = json.load(f)
