@@ -31,6 +31,9 @@ def get_facerects(filepath):
 def main():
     args = parse_args()
 
+    if not os.path.exists(args.out_dir):
+        os.makedirs(args.out_dir)
+
     # get all video folders
     video_facerects = glob.glob(os.path.join(args.src_folder, str(Path('*/'*args.level)), "facerect.npy"))
 
