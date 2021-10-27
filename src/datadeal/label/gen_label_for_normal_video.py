@@ -2,13 +2,14 @@ import json
 import os
 import glob
 
+prefix = 'fatigue_normal_squint'
 VIDEOS_ROOT_DIR = '/zhourui/workspace/pro/fatigue/data/rawframes/new_clean/fatigue_normal_squint'
-OUT_JSON_PATH = '/zhourui/workspace/pro/fatigue/data/clean/fatigue_anns/20211018_fatigue_normal_squint.json'
+OUT_JSON_PATH = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20211027_squint.json'
 
 # VIDEOS_ROOT_DIR = '/Users/zhourui/Downloads/test'
 # OUT_JSON_PATH = '/Users/zhourui/Downloads/test.json'
 
-videos_dirs = glob.glob(VIDEOS_ROOT_DIR+'/*/*')
+videos_dirs = glob.glob(VIDEOS_ROOT_DIR+'/*')
 clips_per_video = 5
 
 normal_json_info = {}
@@ -16,12 +17,11 @@ for v in videos_dirs:
     if not os.path.isdir(v):
         continue
     # get vname as dict keys
-    org_vname = '/'.join(v.rsplit('/', maxsplit=3)[-3:])
-    vname = '../' + org_vname
+    vname = os.path.join(prefix, os.path.basename(v))
 
     video_info = {}
     # train or valid
-    video_info['license_plate_type'] = 'train' if 'train' in org_vname else 'valid'
+    video_info['license_plate_type'] = 'train'
 
     # total frames
     imgs = glob.glob(os.path.join(v, '*.jpg'))
