@@ -35,7 +35,7 @@ def main():
         os.makedirs(args.out_dir)
 
     # get all video folders
-    video_facerects = glob.glob(os.path.join(args.src_folder, str(Path('*/'*args.level)), "facerect.npy"))
+    video_facerects = glob.glob(os.path.join(args.v_dir, str(Path('*/'*args.level)), "facerect.npy"))
 
     # get json file
     for idx,vf in enumerate(video_facerects):
