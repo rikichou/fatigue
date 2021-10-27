@@ -1,9 +1,9 @@
 import json
 
-JSON1 = '/zhourui/workspace/pro/fatigue/data/clean/fatigue_anns/20210824_fatigue_pl_less_than_50_fatigue_full_info_all_path.json'
-JSON2 = '/zhourui/workspace/pro/fatigue/data/clean/fatigue_anns/20211018_fatigue_normal_squint.json'
+JSON1 = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20210824_fatigue_lookdown.json'
+JSON2 = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20211027_squint.json'
 
-OUT_JSON = '/zhourui/workspace/pro/fatigue/data/clean/fatigue_anns/20211018_fatigue_lookdown_squint.json'
+OUT_JSON = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20211027_fatigue_lookdown_squint.json'
 
 with open(JSON1, 'r') as f:
     json1 = json.load(f)
