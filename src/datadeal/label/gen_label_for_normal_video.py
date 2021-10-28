@@ -34,7 +34,7 @@ if __name__ == '__main__':
             continue
         # get vname as dict keys
         vname = os.path.join(prefix, os.path.basename(v))
-        print(prefix, os.path.basename(v))
+        print(prefix, v, os.path.basename(v))
 
         video_info = {}
         # train or valid
