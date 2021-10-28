@@ -1,19 +1,26 @@
 import json
+import argparse
 
-JSON1 = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20210824_fatigue_lookdown.json'
-JSON2 = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20211027_squint.json'
+def parse_args():
+    parser = argparse.ArgumentParser(description='get label for normal video')
+    parser.add_argument('json1', type=str, help='json 1')
+    parser.add_argument('json2', type=str, help='json 2')
+    parser.add_argument('out_json', type=str, help='out json')
+    args = parser.parse_args()
 
-OUT_JSON = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20211027_fatigue_lookdown_squint.json'
+    return args
 
-with open(JSON1, 'r') as f:
-    json1 = json.load(f)
+args = parse_args()
+if __name__ == '__main__':
+    with open(args.json1, 'r') as f:
+        json1 = json.load(f)
 
-with open(JSON2, 'r') as f:
-    json2 = json.load(f)
+    with open(args.json2, 'r') as f:
+        json2 = json.load(f)
 
-json1.update(json2)
+    json1.update(json2)
 
-with open(OUT_JSON, 'w') as f:
-    json.dump(json1, f)
+    with open(args.out_json, 'w') as f:
+        json.dump(json1, f)
 
 
