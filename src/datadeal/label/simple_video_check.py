@@ -2,8 +2,8 @@ import os
 import json
 
 ann_file = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20211028_fatigue_lookdown_squint_calling_smoking.json'
-video_data_prefix = '/zhourui/workspace/pro/fatigue/data/anns/new_clean'
-facerect_data_prefix = video_data_prefix
+video_data_prefix = '/zhourui/workspace/pro/fatigue/data/rawframes/new_clean'
+facerect_data_prefix = '/zhourui/workspace/pro/fatigue/data/anns/new_clean'
 
 statistics = {}
 with open(ann_file, 'r') as fp:
