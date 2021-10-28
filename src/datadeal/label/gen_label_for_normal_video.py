@@ -1,45 +1,60 @@
 import json
 import os
+import argparse
 import glob
 
-prefix = 'fatigue_normal_squint'
-VIDEOS_ROOT_DIR = '/zhourui/workspace/pro/fatigue/data/rawframes/new_clean/fatigue_normal_squint'
-OUT_JSON_PATH = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20211027_squint.json'
+def parse_args():
+    parser = argparse.ArgumentParser(description='get label for normal video')
+    parser.add_argument('src_video_root_dir', type=str, help='source video directory')
+    parser.add_argument('out_json_path', type=str, help='output json file path')
+    parser.add_argument(
+        '--level',
+        type=int,
+        choices=[1, 2, 3],
+        default=1,
+        help='directory level of data')
+    parser.add_argument(
+        '--clips_per_video',
+        type=int,
+        default=5,
+        help='directory level of data')
 
-# VIDEOS_ROOT_DIR = '/Users/zhourui/Downloads/test'
-# OUT_JSON_PATH = '/Users/zhourui/Downloads/test.json'
+    args = parser.parse_args()
 
-videos_dirs = glob.glob(VIDEOS_ROOT_DIR+'/*')
-clips_per_video = 5
+    return args
 
-normal_json_info = {}
-for v in videos_dirs:
-    if not os.path.isdir(v):
-        continue
-    # get vname as dict keys
-    vname = os.path.join(prefix, os.path.basename(v))
+args = parse_args()
+if __name__ == '__main__':
+    normal_json_info = {}
+    videos_dirs = glob.glob(args.src_video_root_dir + '/*')
+    prefix = os.path.basename(args.src_video_root_dir)
+    for v in videos_dirs:
+        if not os.path.isdir(v):
+            continue
+        # get vname as dict keys
+        vname = os.path.join(prefix, os.path.basename(v))
 
-    video_info = {}
-    # train or valid
-    video_info['license_plate_type'] = 'train'
+        video_info = {}
+        # train or valid
+        video_info['license_plate_type'] = 'train'
 
-    # total frames
-    imgs = glob.glob(os.path.join(v, '*.jpg'))
-    video_info['frames_avi'] = len(imgs)
+        # total frames
+        imgs = glob.glob(os.path.join(v, '*.jpg'))
+        video_info['frames_avi'] = len(imgs)
 
-    # add label
-    video_info['label'] = 'fatigue_squint'
+        # add label
+        video_info['label'] = 'fatigue_squint'
 
-    # get fatigue warning idx(end index)
-    total_frames = len(imgs)
-    clip_len = int(total_frames / clips_per_video)
+        # get fatigue warning idx(end index)
+        total_frames = len(imgs)
+        clip_len = int(total_frames / args.clips_per_video)
 
-    video_info['fatigue_warning_idx'] = list(range(clip_len, total_frames, clip_len))
+        video_info['fatigue_warning_idx'] = list(range(clip_len, total_frames, clip_len))
 
-    # add to total info
-    normal_json_info[vname] = video_info
+        # add to total info
+        normal_json_info[vname] = video_info
 
-with open(OUT_JSON_PATH, 'w') as f:
-    json.dump(normal_json_info, f)
+    with open(args.out_json_path, 'w') as f:
+        json.dump(normal_json_info, f)
 
 
