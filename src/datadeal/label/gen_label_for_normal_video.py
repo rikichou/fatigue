@@ -37,8 +37,8 @@ if __name__ == '__main__':
         # print("prefix ", prefix)
         # print("v ", v)
         # print("basename(v) ", os.path.basename(v))
-        print("args.src_video_root_dir ", args.src_video_root_dir)
-        print("os.path.basename(args.src_video_root_dir) ", os.path.basename(args.src_video_root_dir))
+        # print("args.src_video_root_dir ", args.src_video_root_dir)
+        # print("os.path.basename(args.src_video_root_dir) ", os.path.basename(args.src_video_root_dir))
 
         video_info = {}
         # train or valid
