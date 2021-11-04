@@ -130,6 +130,7 @@ def multi_process(video_dirs, args):
         to_process_video_dirs.append(v)
 
     # start process
+    print("To deal {} videos in {} process".format(len(to_process_video_dirs), args.num_worker))
     files = to_process_video_dirs
     grid_size = len(files) // process_num
     process_pool = []
@@ -168,5 +169,8 @@ def main():
     # multi process
     multi_process(to_deal_videos, args)
 
+import multiprocessing
+
+multiprocessing.set_start_method('forkserver', force=True)
 if __name__ == '__main__':
     main()
