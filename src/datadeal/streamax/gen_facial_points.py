@@ -82,6 +82,7 @@ def process_paths(paths, args, lock, counter, total_length):
             if facerect is None:
                 images_rect_dict[imgname]['facerect'] = None
                 images_rect_dict[imgname]['mmpose_kpts'] = None
+                continue
 
             sx, sy, ex, ey = facerect
             # get face rectangle, have no face rectangle, set None
