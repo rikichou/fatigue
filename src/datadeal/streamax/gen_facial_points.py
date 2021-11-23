@@ -141,7 +141,7 @@ def main():
         os.makedirs(args.out_json_dir)
 
     # get all video folders
-    jsonpaths = glob.glob(os.path.join(args.src_folder, str(Path('*/'*args.level))+'*.json'))
+    jsonpaths = glob.glob(os.path.join(args.src_facerect_json_dir, str(Path('*/'*args.level))+'*.json'))
 
     # check if dir is dealed
     print("Found {} videos! {} videos not yet processed!".format(len(jsonpaths), len(jsonpaths)))
