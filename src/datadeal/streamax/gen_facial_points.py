@@ -52,8 +52,8 @@ def get_facerects(filepath):
 def process_paths(paths, args, lock, counter, total_length):
     # init pose model
     pose_model = init_pose_model(
-        r'/zhourui/workspace/pro/source/mmpose/configs/face/2d_kpt_sview_rgb_img/topdown_heatmap/300w/hrnetv2_w18_300w_256x256.py',
-        r'/zhourui/workspace/pro/source/mmpose/pretrained/face/hrnetv2_w18_300w_256x256-eea53406_20211019.pth',
+        r'/zhourui/workspace/pro/source/mmpose/configs/face/2d_kpt_sview_rgb_img/topdown_heatmap/coco_wholebody_face/mobilenetv2_coco_wholebody_face_256x256.py',
+        r'/zhourui/workspace/pro/source/mmpose/pretrained/face/mobilenetv2_coco_wholebody_face_256x256-4a3f096e_20210909.pth',
         device='cuda')
     dataset_info = DatasetInfo(pose_model.cfg.data['test'].get(
         'dataset_info', None))
