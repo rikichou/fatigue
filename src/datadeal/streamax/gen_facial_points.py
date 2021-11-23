@@ -99,8 +99,7 @@ def process_paths(paths, args, lock, counter, total_length):
             points = pose_results[0]['keypoints']
             points_list = []
             for idx, kpt in enumerate(points):
-                x, y, score = kpt
-                points_list.append([x,y,score])
+                points_list.append(kpt.tolist())
             images_rect_dict[imgname]['mmpose_kpts'] = points_list
 
         #np.save(os.path.join(path, args.out_name), images_rect_dict)
