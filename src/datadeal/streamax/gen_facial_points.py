@@ -97,7 +97,11 @@ def process_paths(paths, args, lock, counter, total_length):
                 format='xywh',
                 dataset_info=dataset_info)
             points = pose_results[0]['keypoints']
-            images_rect_dict[imgname]['mmpose_kpts'] = points
+            points_list = []
+            for idx, kpt in enumerate(points):
+                x, y, score = kpt
+                points_list.append([x,y,score])
+            images_rect_dict[imgname]['mmpose_kpts'] = points_list
 
         #np.save(os.path.join(path, args.out_name), images_rect_dict)
         label_name = os.path.join(args.out_json_dir, os.path.basename(video_facerect_json))
