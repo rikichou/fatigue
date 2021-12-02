@@ -51,7 +51,7 @@ def load_annotations(ann_file, video_data_prefix, out_root_dir, data_phase='trai
     print("Start to Parsing label file ", ann_file)
     with open(ann_file, 'r') as fp:
         anns = json.load(fp)
-        anns_keys = anns.keys()
+        anns_keys = list(anns.keys())
         random.shuffle(anns_keys)
 
         count_map = {'fatigue_close': 0, 'fatigue_dahaqian': 0, 'fatigue_look_down': 0, 'fatigue_squint':0, 'smoking': 0, 'calling': 0}
