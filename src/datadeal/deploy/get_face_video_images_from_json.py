@@ -14,7 +14,7 @@ out_root_dir = '/zhourui/workspace/pro/fatigue/data/lianyong/face_video_images'
 if not os.path.exists(out_root_dir):
     os.makedirs(out_root_dir)
 
-def get_facerects(self, filepath):
+def get_facerects(filepath):
     facerect_infos = {}
     with open(filepath, 'r') as fp:
         anns = json.load(fp)
@@ -22,7 +22,7 @@ def get_facerects(self, filepath):
             facerect_infos[imgname] = anns[imgname]['bbox']
     return facerect_infos
 
-def get_valid_fatigue_idx(self, rect_infos, min_frames_before_fatigue, fatigue_idxs, video_dir, max_frames=500):
+def get_valid_fatigue_idx(rect_infos, min_frames_before_fatigue, fatigue_idxs, video_dir, max_frames=500):
     global no_facerect_count
     global no_file_list
 
