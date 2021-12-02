@@ -75,12 +75,14 @@ def load_annotations(ann_file, video_data_prefix, out_root_dir, data_phase='trai
                 # video face rectangle
                 facerect_path = os.path.join(facerect_data_prefix, vname + '.json')
                 if not os.path.exists(facerect_path):
+                    print("Can not found facerect ", facerect_path)
                     continue
                 rect_infos = get_facerects(facerect_path)
 
                 # get valid fatigue index according to facerect infos and fatigue index
                 fat_idxs = get_valid_fatigue_idx(rect_infos, min_frames_before_fatigue, fatigue_idxs, video_path, max_frames=total_frames)
                 if len(fat_idxs) < 1:
+                    print("Invalid fat_idxs")
                     continue
 
                 # dump face images to dir
