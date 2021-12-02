@@ -6,9 +6,9 @@ import numpy as np
 
 import cv2
 
-ann_file = '/zhourui/workspace/pro/fatigue/data/clean/fatigue_anns/20210824_fatigue_pl_less_than_50_fatigue_full_info_all_path.json'
-video_data_prefix = '/zhourui/workspace/pro/fatigue/data/rawframes/new_clean/fatigue_clips'
-facerect_data_prefix = '/zhourui/workspace/pro/fatigue/data/clean/fatigue_info_from_yolov5'
+ann_file = '/zhourui/workspace/pro/fatigue/data/anns/new_clean/20211108_fatigue_lookdown_squint_calling_smoking_dahaqian.json'
+video_data_prefix = '/zhourui/workspace/pro/fatigue/data/rawframes/new_clean'
+facerect_data_prefix = '/zhourui/workspace/pro/fatigue/data/anns/new_clean'
 out_root_dir = '/zhourui/workspace/pro/fatigue/data/lianyong/face_video_images'
 
 if not os.path.exists(out_root_dir):
