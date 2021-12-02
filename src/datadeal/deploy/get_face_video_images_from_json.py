@@ -53,6 +53,7 @@ def load_annotations(ann_file, video_data_prefix, out_root_dir, data_phase='trai
         anns = json.load(fp)
         anns_keys = list(anns.keys())
         random.shuffle(anns_keys)
+        print(len(anns_keys))
 
         count_map = {'fatigue_close': 0, 'fatigue_dahaqian': 0, 'fatigue_look_down': 0, 'fatigue_squint':0, 'smoking': 0, 'calling': 0}
 
