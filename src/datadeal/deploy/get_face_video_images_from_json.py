@@ -92,7 +92,7 @@ def load_annotations(ann_file, video_data_prefix, out_root_dir, data_phase='trai
 
                 for img_idx in imgs_idxs:
                     img_name = 'img_{:05d}.jpg'.format(img_idx)
-                    img_path = os.path.join(video_path, img_idx)
+                    img_path = os.path.join(video_path, img_name)
 
                     out_dir = os.path.join(out_root_dir, vname)
                     if not os.path.exists(out_dir):
