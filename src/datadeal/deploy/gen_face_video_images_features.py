@@ -5,18 +5,20 @@ import glob
 import numpy as np
 
 seq_len = 32
-video_root_dir = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/train'
-out_json_path = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/train.json'
+video_root_dir = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/test'
+out_json_path = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/test_09.json'
+if os.path.exists(out_json_path):
+    os.remove(out_json_path)
 
 import cv2
 from fatigue_caffe_python import fatigue_cnn_cnn as fatigue
 
 # create fatigue handle
-backbone_def = 'fatigue_caffe_python/model/twostage_r18_32_256e224_fatigue_bgr_tiny_caffe_support_20211203_test/backbone_init_sim.prototxt'
-backbone_weights = 'fatigue_caffe_python/model/twostage_r18_32_256e224_fatigue_bgr_tiny_caffe_support_20211203_test/backbone_init_sim.caffemodel'
+backbone_def = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/backbone_embedding_sim.prototxt'
+backbone_weights = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/backbone_embedding_sim.caffemodel'
 
-clshead_def = 'fatigue_caffe_python/model/twostage_r18_32_256e224_fatigue_bgr_tiny_caffe_support_20211203_test/clshead_init_sim.prototxt'
-clshead_weights = 'fatigue_caffe_python/model/twostage_r18_32_256e224_fatigue_bgr_tiny_caffe_support_20211203_test/clshead_init_sim.caffemodel'
+clshead_def = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/clshead_embedding_sim.prototxt'
+clshead_weights = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/clshead_embedding_sim.caffemodel'
 
 fatd = fatigue.FatigueCnnCnn(backbone_def=backbone_def, backbone_weights=backbone_weights,
                             clshead_def=clshead_def, clshead_weights=clshead_weights)
