@@ -14,15 +14,15 @@ class Obj(object):
 args = Obj()
 args.weights = os.path.join(yolov5_src, 'weights/200_last.pt')
 args.imgsz = 640
-args.cpu = False
+args.cpu = True
 fd = FaceDetect(args=args)
 
 # create fatigue handle
-backbone_def = 'fatigue_caffe_python/model/slowfast_r50_3d_4x16x1_256e_clips_rgb_2021-11-25-15-08-01_tiny/backbone_debug_112_sim.prototxt'
-backbone_weights = 'fatigue_caffe_python/model/slowfast_r50_3d_4x16x1_256e_clips_rgb_2021-11-25-15-08-01_tiny/backbone_debug_112_sim.caffemodel'
+backbone_def = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/backbone_embedding_sim.prototxt'
+backbone_weights = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/backbone_embedding_sim.caffemodel'
 
-clshead_def = 'fatigue_caffe_python/model/slowfast_r50_3d_4x16x1_256e_clips_rgb_2021-11-25-15-08-01_tiny/clshead_debug_sim.prototxt'
-clshead_weights = 'fatigue_caffe_python/model/slowfast_r50_3d_4x16x1_256e_clips_rgb_2021-11-25-15-08-01_tiny/clshead_debug_sim.caffemodel'
+clshead_def = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/clshead_embedding_sim.prototxt'
+clshead_weights = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/clshead_embedding_sim.caffemodel'
 
 fatd = fatigue.FatigueCnnCnn(backbone_def=backbone_def, backbone_weights=backbone_weights,
                             clshead_def=clshead_def, clshead_weights=clshead_weights)
@@ -66,7 +66,7 @@ def video_demo(video_path, fd, fatd):
         # check if features len is equal to seq_len
         if len(input_features)<=seq_len:
             input_features.append(feature.copy())
-            print(input_features)
+            #print(input_features)
         # predict
         prob = 0
         if len(input_features)>=seq_len:
@@ -87,7 +87,7 @@ def video_demo(video_path, fd, fatd):
 
 video_path = '/home/ruiming/workspace/pro/fatigue/data/test/video/1103/97f3cfa5fc0b293673aeed04f839e387.mp4'
 video_path = '/home/ruiming/workspace/pro/fatigue/src/datadeal/deploy/fatigue_caffe_python/data/videos/A05500D0000000-210528-134735-134740-01p016000000.avi'
-video_path = '/home/ruiming/workspace/pro/fatigue/src/datadeal/deploy/fatigue_caffe_python/data/videos/A5632000000000-210528-140025-140035-01p016000000.avi'
+video_path = '/home/ruiming/workspace/pro/fatigue/src/datadeal/deploy/fatigue_caffe_python/data/videos/0000000000000000-211213-072205-072740-000002002040.avi'
 #video_path = '/home/ruiming/workspace/pro/fatigue/src/datadeal/deploy/fatigue_caffe_python/data/videos/002B0000FD000000-210419-104008-104012-01p212000000.avi'
 #video_path = '/home/ruiming/workspace/pro/fatigue/src/datadeal/deploy/fatigue_caffe_python/data/videos/晋A02317D-134440-211101-194018-194027-11p21B000000.avi'
 video_demo(video_path, fd, fatd)

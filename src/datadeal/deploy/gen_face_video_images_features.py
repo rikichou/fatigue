@@ -6,7 +6,7 @@ import numpy as np
 
 seq_len = 32
 video_root_dir = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/test'
-out_json_path = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/test_09.json'
+out_json_path = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/test_01111.json'
 if os.path.exists(out_json_path):
     os.remove(out_json_path)
 
@@ -45,7 +45,11 @@ for count,d in enumerate(dirs):
         image = cv2.imread(img_path)
 
         # get face feature
+
         feature = fatd.get_feature(image, [0,0,image.shape[1],image.shape[0]])
+        if '02_03_0_0_28076958' in d:
+            print("idx {}, rect {}".format(idx, [0,0,image.shape[1],image.shape[0]]))
+            print(feature)
         feature = np.array(feature).reshape(-1).tolist()
 
         features.append(feature.copy())
