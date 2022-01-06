@@ -8,10 +8,10 @@ def is_contains_chinese(strs):
             return True
     return False
 
-IMGS_ROOT_DIR = '/zhourui/workspace/pro/fatigue/data/video/train/fatigue_20210122_20210131'
+IMGS_ROOT_DIR = r'G:\pro\fatigue\data\clean\fatigue_look_down'
 
 level = 1
-videos = glob.glob(os.path.join(IMGS_ROOT_DIR, '*/' * level + '*.avi'))
+videos = glob.glob(os.path.join(IMGS_ROOT_DIR, '*.mp4'))
 for v in videos:
     if is_contains_chinese(os.path.basename(v)):
         print('Chineses char : ', v)

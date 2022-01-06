@@ -93,7 +93,7 @@ def test_top_down_demo(videos, lock, counter, total_length):
             lock.release()
 
 def multi_process(video_dirs):
-    process_num = 6
+    process_num = 5
 
     # start process
     files = video_dirs
@@ -129,7 +129,17 @@ def main():
 
     videos = glob.glob(os.path.join(video_dir, str(Path('*/' * 1)) + '.avi'))
 
-    multi_process(videos)
+    # check if dir is dealed
+    to_deal_videos = []
+    for idx,v in enumerate(videos):
+        label_name = os.path.join(out_dir, os.path.splitext(os.path.basename(v))[0] + '.npy')
+        if not os.path.exists(label_name):
+            to_deal_videos.append(v)
+        if idx%1000 == 0:
+            print("Check is dealed {}/{}".format(idx+1, len(videos)))
+    print("Found {} videos! {} videos not yet processed!".format(len(videos), len(to_deal_videos)))
+
+    multi_process(to_deal_videos)
 
 if __name__ == '__main__':
     main()

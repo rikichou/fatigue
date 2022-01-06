@@ -3,7 +3,7 @@ import glob
 import numpy as np
 import cv2
 
-IMG_DIR = r'D:\workspace\pro\fatigue\data\rawframes\valid\fatigue_20210301_20210315\fatigue_close\02_65_6501_0_f5b9d5bdf3a745619253b4516f735569'
+IMG_DIR = r'G:\pro\fatigue\data\old\rawframes\valid\fatigue_ceiba_20210327_20210517\fatigue_look_down\chuanL7375000000000-210430-174545-174547-01p016000000'
 
 label_file_path = os.path.join(IMG_DIR, 'facerect.npy')
 infos_dict = np.load(label_file_path, allow_pickle=True).item()

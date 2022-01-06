@@ -1,5 +1,7 @@
 import sys
 import os
+import time
+
 yolov5_src = r"D:\workspace\pro\source\yolov5"
 sys.path.insert(0, yolov5_src)
 import numpy as np
@@ -16,9 +18,11 @@ def test_top_down_demo():
     person_result.append({'bbox': [50, 50, 50, 100]})
     # build the pose model from a config file and a checkpoint file
     pose_model = init_pose_model(
-        r'E:\workspace\pro\source\mmpose\configs\face\2d_kpt_sview_rgb_img\topdown_heatmap\300w\hrnetv2_w18_300w_256x256.py',
-        r'E:\workspace\pro\source\mmpose\pretrained\face\hrnetv2_w18_300w_256x256-eea53406_20211019.pth',
-        device='cuda')
+        # r'E:\workspace\pro\source\mmpose\configs\face\2d_kpt_sview_rgb_img\topdown_heatmap\300w\hrnetv2_w18_300w_256x256.py',
+        # r'E:\workspace\pro\source\mmpose\pretrained\face\hrnetv2_w18_300w_256x256-eea53406_20211019.pth',
+        r'E:\workspace\pro\source\mmpose\configs\face\2d_kpt_sview_rgb_img\topdown_heatmap\coco_wholebody_face\mobilenetv2_coco_wholebody_face_256x256.py',
+        r'E:\workspace\pro\source\mmpose\pretrained\face\mobilenetv2_coco_wholebody_face_256x256-4a3f096e_20210909.pth',
+        device='cuda:0')
     dataset_info = DatasetInfo(pose_model.cfg.data['test'].get(
         'dataset_info', None))
 
@@ -56,7 +60,9 @@ def test_top_down_demo():
                 imgname = 'img_{:05d}.jpg'.format(i + 1)
 
                 points_info[imgname] = {}
+                st = time.time()
                 bbox = fd.detect(image)
+                print("FD time cost ", time.time() - st)
                 if len(bbox) != 4 or sum(bbox) < 1:
                     print("cat not detect face")
                     points_info[imgname]['facerect'] = None
@@ -67,16 +73,21 @@ def test_top_down_demo():
                 image = image[sy:ey, sx:ex]
 
                 # test a single image, with a list of bboxes.
+                st = time.time()
                 pose_results, _ = inference_top_down_pose_model(
                     pose_model,
                     image,
                     None,
                     format='xywh',
                     dataset_info=dataset_info)
+                print("FK time cost ", time.time()-st)
                 # show the results
-                # img = vis_pose_result(
-                #     pose_model, image, pose_results, dataset_info=dataset_info)
+                img = vis_pose_result(
+                    pose_model, image, pose_results, dataset_info=dataset_info, kpt_score_thr=0.01)
+                cv2.imshow('1', img)
+                cv2.waitKey(10)
                 points = pose_results[0]['keypoints']
+                print(len(points))
                 points_info[imgname]['points'] = points
             else:
                 print(

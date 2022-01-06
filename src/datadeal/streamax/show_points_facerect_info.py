@@ -7,7 +7,7 @@ label_dir = r'H:\pro\fatigue\data\dahaqian\fatigue_dahaqian_outkeypoints_multi'
 video_dir = r'H:\pro\fatigue\data\dahaqian\fatigue_dahaqian'
 
 labels = glob.glob(label_dir+r'\*.npy')
-
+    
 for l in labels:
     # read label info
     info = np.load(l, allow_pickle=True).item()

@@ -59,7 +59,7 @@ def process_paths(paths, args, lock, counter, total_length):
         # get all images to process
         images_path = glob.glob(os.path.join(path, '*.jpg'))
         images_rect_dict = {}
-        for img_path in images_path:
+        for idx,img_path in enumerate(images_path):
             # open and preprocess image
             #image = cv2.imread(img_path) # there is some problem in Chinese char
             image = cv2.imdecode(np.fromfile(img_path, dtype=np.uint8), 1)
@@ -81,6 +81,8 @@ def process_paths(paths, args, lock, counter, total_length):
                 # cv2.rectangle(image, (int(sx), int(sy)), (int(ex), int(ey)), (0,0,255), 1)
                 # cv2.imshow('1', image)
                 # cv2.waitKey(0)
+            if idx%500 == 0:
+                print("{}/{}".format(idx, len(images_path)))
 
         np.save(os.path.join(path, args.out_name), images_rect_dict)
 

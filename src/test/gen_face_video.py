@@ -45,7 +45,7 @@ def parse_args():
     parser.add_argument(
         '--num_worker',
         type=int,
-        default=10,
+        default=1,
         help='num workers to preprocess')
     parser.add_argument('--weights',
                         default=r'D:\workspace\pro\source\yolov5\weights\200_last.pt',
@@ -92,12 +92,15 @@ def process_videos(videos, args, lock, counter, total_length):
         # open video
         vr = mmcv.VideoReader(v)
         fps = vr.fps
+        print('fps ', fps)
+        print('len ', len(vr))
         # video writer
         if args.level == 1:
             out_video_file = os.path.join(args.out_dir, os.path.basename(v))
         else:
             sub_src_video_dir = os.path.dirname(v.replace(args.src_folder, ''))
-            out_video_dir = os.path.join(args.out_dir, sub_src_video_dir)
+            #out_video_dir = os.path.join(args.out_dir, sub_src_video_dir)
+            out_video_dir = args.out_dir + sub_src_video_dir
             if not os.path.exists(out_video_dir):
                 os.makedirs(out_video_dir)
             out_video_file = os.path.join(out_video_dir, os.path.basename(v))
