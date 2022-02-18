@@ -6,8 +6,8 @@ import struct
 import shutil
 
 fracbits = 15
-json_path = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/train_09.json'
-out_bin_dir = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/train_09bins'
+json_path = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images_20211227/test_1227.json'
+out_bin_dir = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images_20211227/test_1227bins'
 
 if os.path.exists(out_bin_dir):
     shutil.rmtree(out_bin_dir)
@@ -42,6 +42,9 @@ with open(json_path, 'r') as fp:
     print(len(features))
     for vprefix in features:
         f = features[vprefix]
+        if '(' in vprefix and ')' in vprefix:
+            print(vprefix)
+            continue
         out_bin_path = os.path.join(out_bin_dir, '_'.join(vprefix.split('/'))+'.bin')
         write_features_to_bin(f, out_bin_path)
 

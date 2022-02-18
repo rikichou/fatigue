@@ -7,11 +7,11 @@ import numpy as np
 from fatigue_caffe_python import fatigue_cnn_cnn as fatigue
 
 # create fatigue handle
-backbone_def = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/backbone_embedding_sim.prototxt'
-backbone_weights = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/backbone_embedding_sim.caffemodel'
+backbone_def = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/twostage_tinyresnet18_32_128e112_bgr_fatigue_embedding/20211227/backbone_112_embedding_sim.prototxt'
+backbone_weights = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/twostage_tinyresnet18_32_128e112_bgr_fatigue_embedding/20211227/backbone_112_embedding_sim.caffemodel'
 
-clshead_def = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/clshead_embedding_sim.prototxt'
-clshead_weights = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/clshead_embedding_sim.caffemodel'
+clshead_def = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/twostage_tinyresnet18_32_128e112_bgr_fatigue_embedding/20211227/clshead_112_embedding_sim.prototxt'
+clshead_weights = '/home/ruiming/workspace/pro/source/ONNXToCaffe/out/fatigue/board/twostage_tinyresnet18_32_128e112_bgr_fatigue_embedding/20211227/clshead_112_embedding_sim.caffemodel'
 
 fatd = fatigue.FatigueCnnCnn(backbone_def=backbone_def, backbone_weights=backbone_weights,
                             clshead_def=clshead_def, clshead_weights=clshead_weights)
@@ -77,6 +77,6 @@ def video_demo(video_dir, fatd):
 # cv2.destroyAllWindows()
 
 
-video_dir = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/test/UN/yueR19081_yueR1908100000000-210707-152106-152116-01p012000000'
+video_dir = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images_20211227/test/UN/yueBDE77000000000-210817-000047-000057-01p012000000'
 #video_dir = '/home/ruiming/workspace/pro/fatigue/data/lianyong/face_video_images/test/CE/02_65_6501_0_7bf59ef7aea84652bd1df320230b21c6'
 video_demo(video_dir, fatd)
